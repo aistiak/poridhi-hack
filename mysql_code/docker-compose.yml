@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  # MySQL service
+  mysql:
+    image: mysql:latest
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_DATABASE: hackathon
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  # Node.js app service
+  app:
+    build:
+      context: .
+    container_name: node-app-container
+    environment:
+      MYSQL_HOST: localhost
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 
+      MYSQL_DB: hackathon
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mysql
+    links:
+      - mysql
+
+volumes:
+  mysql-data:

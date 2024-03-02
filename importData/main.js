@@ -33,7 +33,7 @@ const generateMockData = () => {
 let mockDatabase = generateMockData();
 
 // MongoDB Atlas connection URI
-const mongoURI = '';
+const mongoURI = process.env.MONGO_URL;
 
 // Connect to MongoDB Atlas
 const client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });

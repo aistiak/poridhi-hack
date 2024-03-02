@@ -1,0 +1,59 @@
+# Node.js related
+node_modules/
+npm-debug.log
+*.log
+*.lock
+yarn-error.log
+
+# Environment variables
+.env
+
+# IDE and text editor files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.komodoproject
+*.komodotools
+.komodoide/
+.history/
+.DS_Store
+
+# OS-generated files
+Thumbs.db
+Desktop.ini
+
+# Log files
+*.log
+logs/
+logs/**/*.log
+
+# Ignore built output
+/dist/
+/build/
+/out/
+
+# Dependency directories
+/jspm_packages/
+/bower_components/
+
+# Ignoring configuration files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignoring coverage output
+/coverage
+
+# Ignoring test files
+*.spec.js
+*.test.js
+
+# Ignoring production build directory
+/build
+
+# Ignoring OS-generated files
+.DS_Store
+Icon?
