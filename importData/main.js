@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
 
 const app = express();
-const PORT = 3000;
+const PORT = 3011;
 app.use(bodyParser.json());
 
 const types = [
@@ -33,7 +33,8 @@ const generateMockData = () => {
 let mockDatabase = generateMockData();
 
 // MongoDB Atlas connection URI
-const mongoURI = process.env.MONGO_URL;
+// const mongoURI = process.env.MONGO_URL;
+const mongoURI = "mongodb://localhost:27017/hackathon";
 
 // Connect to MongoDB Atlas
 const client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -60,25 +61,47 @@ client.connect()
         }
       });
 
-      
-    // Endpoint to import data to MongoDB Atlas
-    app.post('/import', async (req, res) => {
-      const newData = req.body;
+        // Endpoint to import data to MongoDB Atlas
+    app.get('/import', async () => {
+      const newData = mockDatabase;
 
       if (!Array.isArray(newData)) {
-        return res.status(400).json({ error: 'Invalid data format. Array expected.' });
+        // return res.status(400).json({ error: 'Invalid data format. Array expected.' });
+        return 'invalid'
       }
 
       // Insert the new data into MongoDB Atlas
       try {
         const result = await collection.insertMany(newData);
         console.log(`${result.insertedCount} documents inserted`);
-        res.json({ message: 'Data imported successfully.' });
+        // res.json({ message: 'Data imported successfully.' });
+        return 'success'
       } catch (err) {
         console.error('Error inserting documents:', err);
-        res.status(500).json({ error: 'Internal server error' });
+        // res.status(500).json({ error: 'Internal server error' });
+        return 'error'
       }
     });
+
+      
+    // Endpoint to import data to MongoDB Atlas
+    // app.post('/import', async (req, res) => {
+    //   const newData = req.body;
+
+    //   if (!Array.isArray(newData)) {
+    //     return res.status(400).json({ error: 'Invalid data format. Array expected.' });
+    //   }
+
+    //   // Insert the new data into MongoDB Atlas
+    //   try {
+    //     const result = await collection.insertMany(newData);
+    //     console.log(`${result.insertedCount} documents inserted`);
+    //     res.json({ message: 'Data imported successfully.' });
+    //   } catch (err) {
+    //     console.error('Error inserting documents:', err);
+    //     res.status(500).json({ error: 'Internal server error' });
+    //   }
+    // });
 
     // Start the Express server
     app.listen(PORT, () => {
