@@ -45,6 +45,16 @@ services:
     network_mode: "host"
     ports:
       - "27017:27017"
+  web:
+    build: ./importData
+    container_name: mongo-import-data
+    ports:
+      - "3011:3011"
+    network_mode: "host"
+    depends_on:
+      - mongo
+    environment:
+      MONGODB_URI: "mongodb://mongodb:27017/hackathon" 
   grafana:
     image: grafana/grafana:latest
     container_name: grafana-container
