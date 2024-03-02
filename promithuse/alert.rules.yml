@@ -1,10 +1,20 @@
 groups:
-- name: alert-rules
+- name: alert-rule-500-error
   rules:
-  - alert: HighRequestLatency
-    expr: job:service-1_and_2:mean1m{job="latency"} > 0.1
-    for: 10m
+  - alert: HTTP500Errors
+    expr: sum_over_time(http_requests_total{status_code="500"}[10m]) >= 10
+    for: 0s  # No additional time requirement before triggering alert
     labels:
-      severity: high
+      severity: warning
     annotations:
-      summary: High request latency
+      summary: HTTP 500 Errors occurred 10 times within 10 minutes
+
+# - name: alert-rule-high-latency
+#   rules:
+#   - alert: HighRequestLatency
+#     expr: job:service-1_and_2:mean1m{job="latency"} > 0.1
+#     for: 10m
+#     labels:
+#       severity: high
+#     annotations:
+#       summary: High request latency
