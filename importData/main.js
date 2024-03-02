@@ -33,7 +33,7 @@ const generateMockData = () => {
 let mockDatabase = generateMockData();
 
 // MongoDB Atlas connection URI
-const mongoURI = 'mongodb+srv://786saadman:1234@cluster0.fb0togl.mongodb.net?retryWrites=true&w=majority&appName=Cluster0';
+const mongoURI = '';
 
 // Connect to MongoDB Atlas
 const client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
