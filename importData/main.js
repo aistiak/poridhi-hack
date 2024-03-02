@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
 
 const app = express();
-const PORT = 3000;
+const PORT = 3011;
 app.use(bodyParser.json());
 
 const types = [
@@ -33,7 +33,8 @@ const generateMockData = () => {
 let mockDatabase = generateMockData();
 
 // MongoDB Atlas connection URI
-const mongoURI = process.env.MONGO_URL;
+// const mongoURI = process.env.MONGO_URL;
+const mongoURI = "mongodb://localhost:27017/hackathon";
 
 // Connect to MongoDB Atlas
 const client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
