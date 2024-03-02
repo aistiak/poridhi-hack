@@ -13,12 +13,19 @@ const traceExporter = new JaegerExporter({
     serviceName: "service-1", // Replace with your service name
   });
 
-const metricsExporter = new PrometheusExporter();
+ const exporterOptions = {
+    port: 9090,
+    endpoint: '/metrics'
+};
+const metricsExporter = new PrometheusExporter(exporterOptions);
+
+
+
 // Create a MeterProvider for metrics
 const meterProvider = new MeterProvider({
     exporter: metricsExporter, // You can use a different exporter here if needed
 });
-  
+// meterProvider.start();
 const sdk = new NodeSDK({
     traceExporter ,
     instrumentations : [

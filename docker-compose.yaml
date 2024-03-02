@@ -1,0 +1,63 @@
+version: '3'
+services:
+  service_2:
+    build:
+      context: ./service_2
+      dockerfile: Dockerfile
+    network_mode: "host"
+    ports:
+      - "4003:4003"
+  service_1:
+    build:
+      context: ./service_1
+      dockerfile: Dockerfile
+    network_mode: "host"
+    ports:
+      - "4001:4001"
+    
+    depends_on:
+      - service_2
+  rabbitmq:
+    image: "rabbitmq:management"
+    container_name: rabbitmq-container
+    network_mode: "host"
+    ports:
+      - "5672:5672"  # RabbitMQ default port
+      - "15672:15672"  # RabbitMQ management UI
+  redis:
+    image: redis:latest
+    container_name: redis-container
+    network_mode: "host"
+    ports:
+      - "6379:6379"
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger-container
+    network_mode: "host"
+    ports:
+      - "16686:16686"  # Jaeger UI
+      - "6831:6831/udp"  # Jaeger compact Thrift
+      - "6832:6832/udp"  # Jaeger binary Thrift
+      - "5778:5778"  # Zipkin Compact Thrift over HTTP
+  # mongo:
+  #   image: mongo:latest
+  #   container_name: mongo-container
+  #   network_mode: "host"
+  #   ports:
+  #     - "27017:27017"
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana-container
+    network_mode: "host"
+    ports:
+      - "3000:3000"
+  promithuse:
+    build:
+      context: ./promithuse
+      dockerfile: Dockerfile
+    network_mode: "host"
+    ports:
+      - "9090:9090"
+
+
+  

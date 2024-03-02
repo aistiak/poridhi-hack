@@ -4,7 +4,7 @@ const express = require("express");
 const sdk = require("./tracing");
 const mongoose = require('mongoose');
 const FeedRepo = require("./repo/feed.repo")
-
+const meterProvider = require("./tracing");
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/hackathon', {
@@ -113,6 +113,7 @@ app.post('/get-feed', async (req, res) => {
     });
     // try to get from cache if not in cache get from db 
 })
+
 
 
 
