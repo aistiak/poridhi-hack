@@ -103,9 +103,16 @@ app.get('/feed', authenticate, async (req, res) => {
     const { traceparent, tracestate } = output;
     console.log({ output, traceparent, tracestate })
 
+    const shouldDelay = req?.headers?.delay;
+    const shouldCache = req?.headers?.redis;
+    console.log({shouldDelay,shouldCache})
     const feedData = await axios({
       method: 'POST',
       url: 'http://localhost:4003/get-feed',
+      data : {
+        shouldDelay,
+        shouldCache
+      },
       headers: {
         traceparent,
         tracestate

@@ -30,6 +30,7 @@ const FeedRepo = {
 
     async getFeed(){
 
+        
         const randomIndex = Math.floor(Math.random() * 90);
         console.log({randomIndex})
         const feed =  await Feed.find({}).skip(randomIndex).limit(10)

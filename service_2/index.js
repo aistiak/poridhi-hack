@@ -85,26 +85,38 @@ app.post('/get-feed', async (req, res) => {
     if (!user) {
         // sth
     }
-    const redisSpan = tracer.startSpan("redis-span", undefined, trace.setSpan(context.active(), getFeedSpan))
+    const shouldCache = !!( ~~req?.body?.shouldCache )
+    console.log({shouldCache})
     const cacheKey = `${user}-feed`;
-    const cacheData = await Cache.get(cacheKey);
-    redisSpan.setAttribute("user", user),
-        redisSpan.setAttribute("cacheKey", cacheKey),
-        redisSpan.setAttribute("cacheData", "data"),
-        redisSpan.end()
-    if (cacheData) {
-        return res.status(200).json({
-            feed: JSON.parse(cacheData)
-        });
+    if(shouldCache){
+        const redisSpan = tracer.startSpan("redis-span", undefined, trace.setSpan(context.active(), getFeedSpan))
+        const cacheData = await Cache.get(cacheKey);
+        redisSpan.setAttribute("user", user),
+            redisSpan.setAttribute("cacheKey", cacheKey),
+            redisSpan.setAttribute("cacheData", "data"),
+            redisSpan.end()
+        if (cacheData) {
+            return res.status(200).json({
+                feed: JSON.parse(cacheData)
+            });
+        }
+
     }
 
     const mongoSpan = tracer.startSpan("mongo-span", undefined, trace.setSpan(context.active(), getFeedSpan))
 
+    const shouldDelay = !!( ~~req?.body?.shouldDelay )
+    console.log({shouldDelay})
+    if(shouldDelay) {
+        await new Promise(resolve => setTimeout(resolve, 3000));
+    }
     const feed = await FeedRepo.getFeed();
 
     mongoSpan.end()
 
-    await Cache.set(cacheKey, JSON.stringify(feed), true);
+    if(shouldCache){
+        await Cache.set(cacheKey, JSON.stringify(feed), true);
+    }
 
     getFeedSpan.end()
 
