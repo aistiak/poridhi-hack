@@ -1,0 +1,10 @@
+groups:
+- name: alert-rules
+  rules:
+  - alert: HighRequestLatency
+    expr: job:service-1_and_2:mean1m{job="latency"} > 0.1
+    for: 10m
+    labels:
+      severity: high
+    annotations:
+      summary: High request latency
