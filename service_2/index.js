@@ -2,6 +2,13 @@
 const {trace , context} = require("@opentelemetry/api")
 const express = require("express") ;
 const sdk = require("./tracing");
+const mongoose = require('mongoose');
+const FeedRepo = require("./repo/feed.repo")
+// Connect to MongoDB
+mongoose.connect('mongodb://localhost:27017/hackathon', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
 
 const redis = require('redis');
 
@@ -51,6 +58,8 @@ app.get('/',(req,res)=>{
     })
 });
 
+
+
 app.post('/get-feed',async (req,res)=>{
     const tracer = trace.getTracer("service-2");
     const getFeedSpan = tracer.startSpan("/get-feed");
@@ -74,6 +83,8 @@ app.post('/get-feed',async (req,res)=>{
          }) ;
     }
 
+    const fd = await FeedRepo.getFeed() ;
+    console.log({fd})
     const feed = [
         { type : 'food' , text : 'i love food'},
         { type : 'sports' , text : 'Bangladesh won the match'},
