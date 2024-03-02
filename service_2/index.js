@@ -160,10 +160,12 @@ const AmpqUrl = 'amqp://localhost:5672';
 const consumeRabbitMQData = async () => {
     try {
         console.log(` -- starting rabbitm1 consumer -- `) ;
+        const queueName = 'my_queue';
         const connection = await amqp.connect(AmpqUrl);
         const channel = await connection.createChannel();
-        const queueName = 'my_queue';
-        // (2) Receiving a message:
+        await channel.assertQueue(queueName, { durable: false });
+        // await channel.sendToQueue(queueName, Buffer.from(JSON.stringify({'date' : {}})));
+        // // (2) Receiving a message:
         await channel.consume(queueName, (msg) => {
             console.log(`Received message: ${msg.content.toString()}`);
             console.log(msg.content.toString())
@@ -176,11 +178,14 @@ const consumeRabbitMQData = async () => {
     }
 }
 
-consumeRabbitMQData().then(res =>{
 
-}).catch(e => {
-    console.log(` --- can not consume rabbimq data -- `)
+consumeRabbitMQData().then((res)=>{
+
+}).catch((e) =>{
+    console.log(e)
 })
+
+
 
 const gracefulShutdown = () => {
     server.close(() => {

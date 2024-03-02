@@ -96,7 +96,7 @@ app.get('/feed', authenticate, async (req, res) => {
     const tracer = trace.getTracer("service-1");
     const getFeedSpan = tracer.startSpan("/feed");
 
-
+    getFeedSpan.setAttribute("user",req.user)
     let output = {}
     const tokenSpanContext = trace.setSpan(context.active(), getFeedSpan);
     propagation.inject(tokenSpanContext, output);
@@ -111,8 +111,9 @@ app.get('/feed', authenticate, async (req, res) => {
         tracestate
       }
     })
-
+    
     const feed = feedData.data
+    getFeedSpan.setAttribute("feed-data",JSON.stringify(feed))
 
     getFeedSpan.end();
     res.json(feed);
